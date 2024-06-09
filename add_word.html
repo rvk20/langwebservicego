@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodawanie słów</title>
+</head>
+<body>
+    <h1>Dodawanie nowego słowa</h1>
+    <input type="text" id="foreignWord" placeholder="Słowo w języku obcym">
+    <input type="text" id="polishWord" placeholder="Tłumaczenie na język polski">
+    <button onclick="addWord()">Dodaj słowo</button>
+
+    <script>
+        async function addWord() {
+            const foreignWord = document.getElementById("foreignWord").value;
+            const polishWord = document.getElementById("polishWord").value;
+
+            if (foreignWord && polishWord) {
+                const data = {
+                    ForeignWord: foreignWord,
+                    PolishWord: polishWord
+                };
+
+                try {
+                    const response = await fetch("http://localhost:8080/add_word", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        console.log("Słowo dodane pomyślnie!");
+                    } else {
+                        console.error("Błąd podczas dodawania słowa.");
+                    }
+                } catch (error) {
+                    console.error("Wystąpił błąd:", error);
+                }
+            } else {
+                console.error("Wprowadź oba pola.");
+            }
+        }
+    </script>
+</body>
+</html>
